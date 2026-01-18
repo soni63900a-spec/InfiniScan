@@ -109,6 +109,26 @@
 
         .success-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; margin: 2rem auto 0; }
         .btn-preview-tab { background: #8b5cf6; color: white; }
+        #toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #10b981;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+}
+#toast.show {
+    opacity: 1;
+    pointer-events: auto;
+}
     </style>
 </head>
 <body>
@@ -248,7 +268,7 @@
             <span onclick="openModal('Contact Us', contactUsText, true)">Contact Us</span>
         </div>
     </footer>
-
+    <div id="toast">✅ Download Successful! Your PDF has been saved.</div>
     <script>
         let items = [];
         let pdfBlob = null;
@@ -453,6 +473,19 @@ By submitting the form, you confirm that the information provided by you is volu
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.getElementById('home-view').classList.add('active');
         }
+        function downloadPDF() {
+    if (!pdfUrl) return;
+
+    const a = document.createElement('a'); 
+    a.href = pdfUrl; 
+    a.download = `InfiniScan_${Date.now()}.pdf`; 
+    a.click();
+
+    // Show toast message
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000); // 3 seconds ke liye dikhega
+}
     </script>
 </body>
 </html>
